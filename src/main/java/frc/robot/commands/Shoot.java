@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Outtake;
-import frc.robot.Constants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.Utils;
 
 /** An example command that uses an example subsystem. */
@@ -17,7 +17,7 @@ public class Shoot extends Command {
     Outtake m_Outtake;
     Supplier<Double> speed;
     int bufferPosition;
-    double[] circularBuffer = new double[Constants.OperatorConstants.outtakeBufferSize];
+    double[] circularBuffer = new double[OperatorConstants.outtakeBufferSize];
 
     public Shoot(Outtake outtake, Supplier<Double> motorSpeed) {
         m_Outtake = outtake;
@@ -45,15 +45,15 @@ public class Shoot extends Command {
         circularBuffer[bufferPosition] = speed.get();
         // Checks to see if Util range of circular buffer array is withen threshold,
         // meaning data is consistent
-        if (Utils.range(circularBuffer) <= Constants.OperatorConstants.outtakeBufferThreshold) {
+        if (Utils.range(circularBuffer) <= OperatorConstants.outtakeBufferThreshold) {
             // Motor go spin
             m_Outtake.primerSpinUp(1);
             System.out.println("I did a thing! :)-");
         }
         // Increment buffer position, using modulo to wrap the value back to 10 if it is
         // higher than 10
-        bufferPosition = (bufferPosition + Constants.OperatorConstants.outtakeBufferIncrement)
-                % Constants.OperatorConstants.outtakeBufferSize;
+        bufferPosition = (bufferPosition + OperatorConstants.outtakeBufferIncrement)
+                % OperatorConstants.outtakeBufferSize;
     }
 
     // Called once the command ends or is interrupted.

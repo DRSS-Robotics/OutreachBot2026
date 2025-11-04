@@ -23,6 +23,9 @@ public final class Constants {
     public static final int kShooterMotorID = 4;
     public static final int kPitchMotorID = 5;
 
+    public static final double kPitchMotorLowerBound = 0;
+    public static final double kPitchMotorUpperBound = 30;
+
     public static final double kDriveDeadband = 0.1;
     public static final double kShooterDeadband = 0.1;
 
