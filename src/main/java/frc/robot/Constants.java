@@ -22,6 +22,7 @@ public final class Constants {
     public static final int kPrimerMotorID = 3;
     public static final int kShooterMotorID = 4;
     public static final int kPitchMotorID = 5;
+    public static final boolean kUseCharlieInput = true; 
 
     public static final double kPitchMotorLowerBound = 0;
     public static final double kPitchMotorUpperBound = 30;

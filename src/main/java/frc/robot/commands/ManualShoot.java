@@ -12,19 +12,17 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Utils;
 
 /** An example command that uses an example subsystem. */
-public class Shoot extends Command {
+public class ManualShoot extends Command {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
     Outtake m_Outtake;
     Supplier<Double> speed;
-    int bufferPosition;
-    double[] circularBuffer = new double[OperatorConstants.outtakeBufferSize];
+    Supplier<Boolean> shouldFire;
 
-    public Shoot(Outtake outtake, Supplier<Double> motorSpeed) {
+    public ManualShoot(Outtake outtake, Supplier<Double> motorSpeed, Supplier<Boolean> isAPressed) {
         m_Outtake = outtake;
         speed = motorSpeed;
-        bufferPosition = 0;
+        shouldFire = isAPressed;
         // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(outtake);
     }
 
     // Called when the command is initially scheduled.
@@ -39,24 +37,12 @@ public class Shoot extends Command {
      */
     @Override
     public void execute() {
-        // Sets speed of shooter motor
         m_Outtake.shooterSpinUp(speed.get());
-        // Puts the latest speed into circular buffer
-        circularBuffer[bufferPosition] = speed.get();
-        // Checks to see if Util range of circular buffer array is withen threshold,
-        // meaning data is consistent
-        if (Utils.range(circularBuffer) <= OperatorConstants.outtakeBufferThreshold) {
-            // Motor go spin
+        if (shouldFire.get()) {
             m_Outtake.primerSpinUp(1);
-            System.out.println("I did a thing! :)-");
         }
-        // Increment buffer position, using modulo to wrap the value back to 10 if it is
-        // higher than 10
-        bufferPosition = (bufferPosition + OperatorConstants.outtakeBufferIncrement)
-                % OperatorConstants.outtakeBufferSize;
     }
 
-    // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         m_Outtake.stopShoot();

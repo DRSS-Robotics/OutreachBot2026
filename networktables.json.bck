@@ -1,0 +1,26 @@
+[
+  {
+    "name": "/LiveWindow/.status/LW Enabled",
+    "type": "boolean",
+    "value": false,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/SmartDashboard/useCharlieInput",
+    "type": "boolean",
+    "value": true,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/SmartDashboard/Auto Selector",
+    "type": "string",
+    "value": "Select Autonomous ...",
+    "properties": {
+      "persistent": true
+    }
+  }
+]
