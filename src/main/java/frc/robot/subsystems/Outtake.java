@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -35,6 +36,10 @@ public class Outtake extends SubsystemBase {
     pitchMotor = new SparkMax(pitchId, MotorType.kBrushless);
     pMCLC = new ClosedLoopConfig().pid(1,1,1);
     pMC = new SparkMaxConfig();
+
+    pMC.voltageCompensation(10);
+    pMC.smartCurrentLimit(60);
+    pMC.idleMode(IdleMode.kCoast);
     pMC.apply(pMCLC);
 
     pitchMotor.configure(pMC, ResetMode.kResetSafeParameters,  PersistMode.kNoPersistParameters);
@@ -71,14 +76,15 @@ public class Outtake extends SubsystemBase {
   public void periodic() {
     double position = pitchMotor.getEncoder().getPosition();
     
-    // Check if pitch motor is outside bounds
-    if (((OperatorConstants.kPitchMotorLowerBound >= position) && pitchMotor.get() > 0) || 
-        ((OperatorConstants.kPitchMotorUpperBound <= position) && pitchMotor.get() < 0)) {
+    // Check if pitch motor is outside bounds or within deadband
+    if (((OperatorConstants.kPitchMotorLowerBound >= position) && pitchMotor.get() < 0) || 
+        ((OperatorConstants.kPitchMotorUpperBound <= position) && pitchMotor.get() > 0) ||
+        (Math.abs(speedSupplier.get()) <= OperatorConstants.kPitchDeadband)) {
       // If outside bounds, do not move motor
       pitchMotor.set(0);
     } else {
-      // If within bounds, set motor speed to right stick X axis
-      pitchMotor.set(speedSupplier.get());
+      // If within bounds, set motor speed to right stick Y axis
+      pitchMotor.set(-speedSupplier.get());
     }
   }
 }

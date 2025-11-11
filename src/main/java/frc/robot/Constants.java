@@ -28,6 +28,7 @@ public final class Constants {
 
     public static final double kDriveDeadband = 0.1;
     public static final double kShooterDeadband = 0.1;
+    public static final double kPitchDeadband = 0.1;
 
     public static final double kSecondsDelay = 1.5;
 

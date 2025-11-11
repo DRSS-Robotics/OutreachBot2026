@@ -23,7 +23,7 @@ public class RobotContainer {
       OperatorConstants.kDriverControllerPort);
   private final Outtake m_Outtake = new Outtake(OperatorConstants.kPrimerMotorID,
       OperatorConstants.kShooterMotorID, OperatorConstants.kPitchMotorID,
-      m_driverController::getRightX);
+      m_driverController::getRightY);
 
   public RobotContainer() {
     configureBindings();
